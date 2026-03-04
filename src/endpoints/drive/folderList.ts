@@ -38,6 +38,7 @@ export class DriveFolderList extends OpenAPIRoute {
 								name: z.string(),
 								mimeType: z.string(),
 								previewUrl: z.string(),
+								downloadUrl: z.string(),
 							}),
 						),
 					}),
@@ -68,23 +69,20 @@ export class DriveFolderList extends OpenAPIRoute {
 			return c.json({ success: false, items: [] }, 500);
 		}
 
-		const jsonUnknown: unknown = await response.json();
-
-		const parsed = DriveApiResponseSchema.safeParse(jsonUnknown);
-
-		if (!parsed.success) {
-			return c.json({ success: false, items: [] }, 500);
-		}
-
-		const driveData = parsed.data;
+		const json = DriveApiResponseSchema.parse(await response.json());
 
 		const baseUrl = new URL(c.req.url).origin;
 
-		const items = driveData.files.map((file) => ({
+		const items = json.files.map((file) => ({
 			id: file.id,
 			name: file.name,
 			mimeType: file.mimeType,
-			previewUrl: `${baseUrl}/files/${file.id}`,
+
+			// Thumbnail nhẹ (không load file gốc)
+			previewUrl: `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`,
+
+			// Link file gốc qua Worker (chỉ load khi click)
+			downloadUrl: `${baseUrl}/files/${file.id}`,
 		}));
 
 		return {

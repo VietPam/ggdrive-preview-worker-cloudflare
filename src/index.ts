@@ -5,15 +5,20 @@ import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { filesRouter } from "./endpoints/files/router";
 import { driveRouter } from "./endpoints/drive/router";
-
+import { cors } from "hono/cors";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
-app.use("*", async (c, next) => {
-  await next()
-  c.header("Access-Control-Allow-Origin", "*")
-  c.header("Access-Control-Allow-Headers", "Content-Type")
-})
+
+app.use('*', cors({
+    origin: '*', // Bạn có thể thay '*' bằng 'https://3000-cs-33038045240-default.cs-asia-southeast1-seal.cloudshell.dev' để bảo mật hơn
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization', 'x-api-key'], // QUAN TRỌNG: Phải có x-api-key ở đây
+    exposeHeaders: ['Content-Length'],
+    maxAge: 600,
+    credentials: true,
+}));
+
 app.onError((err, c) => {
 	if (err instanceof ApiException) {
 		// If it's a Chanfana ApiException, let Chanfana handle the response

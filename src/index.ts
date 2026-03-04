@@ -9,7 +9,11 @@ import { driveRouter } from "./endpoints/drive/router";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
-
+app.use("*", async (c, next) => {
+  await next()
+  c.header("Access-Control-Allow-Origin", "*")
+  c.header("Access-Control-Allow-Headers", "Content-Type")
+})
 app.onError((err, c) => {
 	if (err instanceof ApiException) {
 		// If it's a Chanfana ApiException, let Chanfana handle the response

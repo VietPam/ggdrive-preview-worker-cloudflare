@@ -4,6 +4,8 @@ import { tasksRouter } from "./endpoints/tasks/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { filesRouter } from "./endpoints/files/router";
+import { driveRouter } from "./endpoints/drive/router";
+
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
@@ -47,6 +49,7 @@ openapi.route("/tasks", tasksRouter);
 // Register other endpoints
 openapi.post("/dummy/:slug", DummyEndpoint);
 
+openapi.route("/drive", driveRouter);
 
 openapi.route("/files", filesRouter);
 

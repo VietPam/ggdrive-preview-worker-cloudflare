@@ -1,0 +1,4 @@
+const DRIVE_CONFIG = {
+  API_KEY: "AIzaSyBU6W5bU6KMcjaFCwaGpUYDn2cESYEty64",
+  FOLDER_ID: "1V4S_TYMaYWhbiM_rv3kzHAG9dd3d72S3"
+}

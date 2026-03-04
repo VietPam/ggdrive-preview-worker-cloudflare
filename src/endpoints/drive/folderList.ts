@@ -79,7 +79,7 @@ export class DriveFolderList extends OpenAPIRoute {
 			mimeType: file.mimeType,
 
 			// Thumbnail nhẹ (không load file gốc)
-			previewUrl: `${baseUrl}/preview/${file.id}`,
+			previewUrl: `${baseUrl}/drive/preview/${file.id}`,
 
 			// Link file gốc qua Worker (chỉ load khi click)
 			downloadUrl: `${baseUrl}/files/${file.id}`,
